@@ -17,6 +17,8 @@ class TokenTest {
         Position end = new Position(1, 2, 2);
         Span span = new Span(start, end);
         Token token = new Token(kind, lexeme, span);
-        assertEquals("Token { Kind[LATIN_SMALL_LETTER_A] Lexeme[0x61] Span[{1:1 1}:{1:2 2}] }", token.toString());
+        assertEquals(
+                "Token { Kind[LATIN_SMALL_LETTER_A] Lexeme[0x61] Span[{1:1 1}:{1:2 2}] }",
+                token.toString());
     }
 }

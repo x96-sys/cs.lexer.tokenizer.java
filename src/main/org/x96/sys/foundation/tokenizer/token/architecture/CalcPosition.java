@@ -24,11 +24,22 @@ public class CalcPosition {
 
     private int getLine(int offset) {
         if (offset == 0) return 0;
-        if (offset == 1) return 1;
-        for (int i = 0; i < line_starts.length; i++) {
-            if (offset <= line_starts[i]) return i + 1;
+
+        int low = 0;
+        int high = line_starts.length - 1;
+        int line = line_starts.length; // valor default caso offset > todas posições
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (offset <= line_starts[mid]) {
+                line = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
         }
-        return line_starts.length + 1;
+
+        return line + 1;
     }
 
     private int getColumn(int offset) {
