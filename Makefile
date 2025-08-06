@@ -28,14 +28,13 @@ FLUX_JAR      = $(LIB_DIR)/org.x96.sys.foundation.io.jar
 FLUX_URL      = https://github.com/x96-sys/flux.java/releases/download/v$(FLUX_VERSION)/org.x96.sys.foundation.io.jar
 
 JAVA_SOURCES := $(shell find $(SRC_MAIN) -name "*.java")
-CLASS_FILES := $(patsubst $(SRC_MAIN)/%.java,$(MAIN_BUILD)/%.class,$(JAVA_SOURCES))
 
 # Target principal que depende dos arquivos .class
-build: generate-build-info lib/flux $(CLASS_FILES)
+build: generate-build-info lib/flux compile-all
 
-# Regra para compilar arquivos .class individuais
-$(MAIN_BUILD)/%.class: $(SRC_MAIN)/%.java | $(MAIN_BUILD)
-	javac -d $(MAIN_BUILD) -cp $(MAIN_BUILD):$(FLUX_JAR) $<
+compile-all: | $(MAIN_BUILD)
+	javac -d $(MAIN_BUILD) -cp $(FLUX_JAR) $(JAVA_SOURCES)
+
 
 # Cria o diretório de build
 $(MAIN_BUILD):
@@ -174,4 +173,4 @@ generate-build-info:
 clean:
 	rm -rf $(BUILD_DIR) $(TOOL_DIR) $(LIB_DIR)
 
-.PHONY: build-cli cli build-test test coverage-run coverage-report coverage test-method test-class tools lib clean generate-build-info build-info
+.PHONY: build-cli cli build-test test coverage-run coverage-report coverage test-method test-class tools lib clean generate-build-info build-info compile-all

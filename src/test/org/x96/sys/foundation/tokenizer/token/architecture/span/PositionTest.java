@@ -1,4 +1,4 @@
-package org.x96.sys.foundation.tokenizer.token.architecture;
+package org.x96.sys.foundation.tokenizer.token.architecture.span;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class PositionTest {
 
-    //  ls **/*.java | entr sh -c 'clear && make test-method
+    // ls **/*.java | entr sh -c 'clear && make test-method
     // METHOD="org.x96.sys.foundation.tokenizer.token.architecture.PositionTest#happy"'
     @Test
     void happy() {

@@ -1,4 +1,4 @@
-package org.x96.sys.foundation.tokenizer.token.architecture;
+package org.x96.sys.foundation.tokenizer.token.architecture.span;
 
 import static org.junit.jupiter.api.Assertions.*;
 

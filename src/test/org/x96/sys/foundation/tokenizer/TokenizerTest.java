@@ -1,9 +1,9 @@
 package org.x96.sys.foundation.tokenizer;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.io.ByteStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TokenizerTest {
 
