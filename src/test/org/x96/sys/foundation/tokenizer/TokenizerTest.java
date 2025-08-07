@@ -14,18 +14,31 @@ import java.util.List;
 class TokenizerTest {
 
     @Test
-    void happy() {
-        String input =
+    void happyGetLine() {
+        String input = "a\nb";
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(input.getBytes()));
+        assertEquals("", tokenizer.getLineByNumber(0));
+        assertEquals("a", tokenizer.getLineByNumber(1));
+        assertEquals("b", tokenizer.getLineByNumber(2));
+        assertEquals("", tokenizer.getLineByNumber(4));
+
+        input = "a";
+        tokenizer = new Tokenizer(ByteStream.raw(input.getBytes()));
+        assertEquals("", tokenizer.getLineByNumber(0));
+        assertEquals("a", tokenizer.getLineByNumber(1));
+        assertEquals("", tokenizer.getLineByNumber(4));
+
+        input =
                 """
                 example of text
                 with multiples
-                lines
+                lines\
                 """;
-        Tokenizer tokenizer = new Tokenizer(ByteStream.wrapped(input.getBytes()));
+        tokenizer = new Tokenizer(ByteStream.wrapped(input.getBytes()));
         assertEquals("", tokenizer.getLineByNumber(0));
-        assertEquals("example of text", tokenizer.getLineByNumber(1));
+        assertEquals("\u0002example of text", tokenizer.getLineByNumber(1));
         assertEquals("with multiples", tokenizer.getLineByNumber(2));
-        assertEquals("lines", tokenizer.getLineByNumber(3));
+        assertEquals("lines\u0003", tokenizer.getLineByNumber(3));
         assertEquals("", tokenizer.getLineByNumber(4));
     }
 

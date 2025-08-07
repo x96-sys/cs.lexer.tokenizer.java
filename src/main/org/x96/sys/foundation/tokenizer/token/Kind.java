@@ -164,7 +164,6 @@ public enum Kind {
     //              NON-TERMINALS
     // -----------------------------------------
 
-    Hex,
     Word,
     ;
 

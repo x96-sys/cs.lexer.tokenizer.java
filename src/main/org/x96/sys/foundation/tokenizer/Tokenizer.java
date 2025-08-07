@@ -63,16 +63,32 @@ public class Tokenizer {
 
     public String getLineByNumber(int line) {
         if (line <= 0) return "";
-        if (line > calc.line_starts.length) return "";
+        if (line > calc.line_starts.length + 1)
+            return ""; // +1 porque a última linha pode não ter \n
+
+        int index = line - 1;
+        int start = encontraOndeInicia(index);
+        int end = encontraOndeTermina(index);
+
         StringBuilder sb = new StringBuilder();
-        int offset_start = line == 1 ? 0 : calc.line_starts[line - 2] + 1;
-        int offset_end = calc.line_starts[line - 1];
-        for (int i = offset_start; i < offset_end; i++) {
-            int v = byteStream.at(i);
-            if (v != 0x2 && v != 0x3) {
-                sb.append((char) byteStream.at(i));
-            }
+        for (int i = start; i < end; i++) {
+            sb.append((char) byteStream.at(i));
         }
         return sb.toString();
+    }
+
+    private int encontraOndeInicia(int index) {
+        if (index == 0) {
+            return 0;
+        }
+        return calc.line_starts[index - 1] + 1;
+    }
+
+    private int encontraOndeTermina(int index) {
+        if (index >= calc.line_starts.length) {
+            return length();
+        } else {
+            return calc.line_starts[index];
+        }
     }
 }
