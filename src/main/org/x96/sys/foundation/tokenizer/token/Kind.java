@@ -28,7 +28,7 @@ public enum Kind {
     SI, // [0xF] Shift in
 
     // -----------------------------------------
-    // ===0x1===
+
     DLE, // [0x10] Data link escape
     DC1, // [0x11] Device control 1
     DC2, // [0x12] Device control 2
@@ -45,6 +45,7 @@ public enum Kind {
     GS, // [0x1D] Group separator
     RS, // [0x1E] Record separator
     US, // [0x1F] Unit separator
+
     // -----------------------------------------
 
     SPACE, // [0x20] [ ]
@@ -159,8 +160,12 @@ public enum Kind {
     TILDE, // [0x7E] [~]
     DELETE, // [0x7F]
 
-// -----------------------------------------
-;
+    // -----------------------------------------
+    //              NON-TERMINALS
+    // -----------------------------------------
+
+    Word,
+    ;
 
     private static final Kind[] KIND_CACHE = new Kind[0x80];
 
