@@ -1,12 +1,14 @@
 package org.x96.sys.foundation.tokenizer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.tokenizer.token.Kind;
-import org.x96.sys.foundation.tokenizer.token.Token;
-import org.x96.sys.foundation.tokenizer.token.architecture.span.Position;
+import org.x96.sys.foundation.token.Kind;
+import org.x96.sys.foundation.token.Token;
+import org.x96.sys.foundation.token.architecture.span.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,9 @@ class TokenizerTest {
         assertEquals(1, tokenizer.length());
         assertTrue(tokenizer.ready());
         assertEquals(Kind.LATIN_SMALL_LETTER_A, tokenizer.kind());
-        Token token = tokenizer.tokenize(Kind.UNKNOWN);
-        assertEquals(Kind.UNKNOWN, token.kind());
+        Token token = tokenizer.tokenize("UNKNOWN");
+        assertEquals(Kind.LATIN_SMALL_LETTER_A, token.kind());
+        assertEquals("UNKNOWN", token.overKind);
         assertFalse(tokenizer.ready());
     }
 

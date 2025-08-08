@@ -9,7 +9,7 @@ import org.x96.sys.foundation.tokenizer.Tokenizer;
 import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.Terminal;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 class AnalyzerTest {
 

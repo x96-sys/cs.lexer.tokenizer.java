@@ -11,12 +11,7 @@ public abstract class Router implements Routing {
     public boolean analyzed = false;
 
     public Dispatcher dispatcher() {
-        if (this.analyzed) {
-            return this.dispatcher;
-        } else {
-            this.dispatcher = new Dispatcher(this);
-            this.analyzed = true;
-        }
+        if (!analyzed) analysis();
         return this.dispatcher;
     }
 
@@ -34,8 +29,10 @@ public abstract class Router implements Routing {
 
     @Override
     public void analysis() {
-        dispatcher();
-        this.analyzed = true;
+        if (!this.analyzed) {
+            this.dispatcher = new Dispatcher(this);
+            this.analyzed = true;
+        }
     }
 
     @Override

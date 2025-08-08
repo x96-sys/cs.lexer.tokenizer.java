@@ -9,6 +9,8 @@ import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visiting;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public final class Analyzer {
@@ -35,5 +37,16 @@ public final class Analyzer {
             }
         }
         return table;
+    }
+
+    public static Byte[] discovery(Class<? extends Visitor> v, int from, int to) {
+        List<Byte> l = new LinkedList<>();
+        for (int i = from; i < to; i++) {
+            Tokenizer t = new Tokenizer(ByteStream.raw(new byte[] {(byte) i}));
+            if (ReflectiveVisitorFactory.happens(v, t).allowed()) {
+                l.add((byte) i);
+            }
+        }
+        return l.toArray(Byte[]::new);
     }
 }

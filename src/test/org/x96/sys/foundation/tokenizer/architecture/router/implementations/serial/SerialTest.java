@@ -1,24 +1,27 @@
 package org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.buzz.Buzz;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial.BuzzCantSerialize;
-import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial.BuzzUnexpectedTokenForVisitor;
 import org.x96.sys.foundation.io.ByteStream;
 import org.x96.sys.foundation.tokenizer.Tokenizer;
 import org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture.Quantifier;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.Terminal;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Etx;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Lf;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitOne;
+import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitTwo;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterA;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c7.LatinSmallLetterS;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Kind;
+import org.x96.sys.foundation.token.Token;
 
 class SerialTest {
     @Test
@@ -77,20 +80,29 @@ class SerialTest {
         Serial s = new Serial();
         assertEquals("- Current Serial [0]", s.toString());
         s.know(DigitZero.class);
-        assertEquals("""
+        assertEquals(
+                """
                 - Current Serial [1]
-                  0 => [JUST_ONE; DigitZero]""", s.toString());
+                  0 => [JUST_ONE; DigitZero]\
+                """,
+                s.toString());
         s.zeroOrOne(Lf.class);
-        assertEquals("""
+        assertEquals(
+                """
                 - Current Serial [2]
                   0 => [JUST_ONE; DigitZero]
-                  1 => [ZERO_OR_ONE; Lf]""", s.toString());
+                  1 => [ZERO_OR_ONE; Lf]\
+                """,
+                s.toString());
         s.zeroOrMore(DigitOne.class);
-        assertEquals("""
+        assertEquals(
+                """
                 - Current Serial [3]
                   0 => [JUST_ONE; DigitZero]
                   1 => [ZERO_OR_ONE; Lf]
-                  2 => [ZERO_OR_MORE; DigitOne]""", s.toString());
+                  2 => [ZERO_OR_MORE; DigitOne]\
+                """,
+                s.toString());
     }
 
     @Test
@@ -98,7 +110,7 @@ class SerialTest {
         Serial serial = new Serial();
         serial.one(DigitZero.class);
 
-        byte[] payload = new byte[]{0x30, 0x30, 0x30};
+        byte[] payload = new byte[] {0x30, 0x30, 0x30};
         ByteStream bs = ByteStream.raw(payload);
         Token[] tokens = serial.stream(new Tokenizer(bs));
         assertEquals(1, tokens.length);
@@ -116,7 +128,7 @@ class SerialTest {
         Serial serial = new Serial();
         serial.one(DigitZero.class);
 
-        byte[] payload = new byte[]{0x31};
+        byte[] payload = new byte[] {0x31};
         ByteStream bs = ByteStream.raw(payload);
         Tokenizer tokenizer = new Tokenizer(bs);
         var e = assertThrows(BuzzCantSerialize.class, () -> serial.stream(tokenizer));
@@ -128,23 +140,16 @@ class SerialTest {
         serial.one(DigitZero.class);
         serial.one(DigitOne.class);
         serial.one(DigitZero.class);
-        Tokenizer t = new Tokenizer(
-                ByteStream.raw(new byte[]{0x30, 0x31, 0x31})
-        );
-        e = assertThrows(
-                BuzzCantSerialize.class,
-                () -> serial.stream(
-                        t
-                )
-        );
-        assertEquals("""
-                        🦕 [0x72]
-                        🐝 [BuzzCantSerialize]
-                        🌵 > Atual visitante [DigitZero] encontrou token [0x31] inesperado;
-                          > Tokens esperados são [0x30]
-                        """,
-                e.getMessage().replaceAll("\u001B\\[[;\\d]*m", "")
-        );
+        Tokenizer t = new Tokenizer(ByteStream.raw(new byte[] {0x30, 0x31, 0x31}));
+        e = assertThrows(BuzzCantSerialize.class, () -> serial.stream(t));
+        assertEquals(
+                """
+                🦕 [0x72]
+                🐝 [BuzzCantSerialize]
+                🌵 > Atual visitante [DigitZero] encontrou token [0x31] inesperado;
+                  > Tokens esperados são [0x30]
+                """,
+                e.getMessage().replaceAll("\u001B\\[[;\\d]*m", ""));
         assertTrue(t.ready());
         assertEquals(0x31, t.look());
         assertEquals(2, t.pointer());
@@ -155,7 +160,7 @@ class SerialTest {
         Serial serial = new Serial();
         serial.zeroOrOne(DigitZero.class);
 
-        byte[] payload = new byte[]{0x30, 0x30, 0x30};
+        byte[] payload = new byte[] {0x30, 0x30, 0x30};
         ByteStream bs = ByteStream.raw(payload);
         Token[] tokens = serial.stream(new Tokenizer(bs));
         assertEquals(1, tokens.length);
@@ -192,7 +197,7 @@ class SerialTest {
         serial.zeroOrMore(DigitZero.class);
         serial.zeroOrMore(LatinSmallLetterC.class);
 
-        ByteStream bs = ByteStream.raw(new byte[]{0x30, 0x30, 0x30});
+        ByteStream bs = ByteStream.raw(new byte[] {0x30, 0x30, 0x30});
         Token[] tokens = serial.stream(new Tokenizer(bs));
         assertEquals(3, tokens.length);
 
@@ -200,7 +205,7 @@ class SerialTest {
 
         serial.zeroOrMore(DigitZero.class);
 
-        byte[] payload = new byte[]{0x30, 0x30, 0x30, 0x31, 0x31, 0x31};
+        byte[] payload = new byte[] {0x30, 0x30, 0x30, 0x31, 0x31, 0x31};
         bs = ByteStream.raw(payload);
         tokens = serial.stream(new Tokenizer(bs));
         assertEquals(3, tokens.length);
@@ -231,29 +236,28 @@ class SerialTest {
     void happyOneOrMore() {
         Serial serial = new Serial();
         serial.oneOrMore(LatinSmallLetterS.class);
-        byte[] payload = new byte[]{0x73, 0x63};
+        byte[] payload = new byte[] {0x73, 0x63};
         Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
         Token[] tokens = serial.stream(tokenizer);
         assertEquals(1, tokens.length);
 
         serial.clean();
         serial.oneOrMore(LatinSmallLetterS.class);
-        payload = new byte[]{0x73, 0x73, 0x63};
+        payload = new byte[] {0x73, 0x73, 0x63};
         tokens = serial.stream(new Tokenizer(ByteStream.raw(payload)));
         assertEquals(2, tokens.length);
-
 
         serial.clean();
         serial.oneOrMore(LatinSmallLetterS.class);
         serial.oneOrMore(LatinSmallLetterC.class);
-        payload = new byte[]{0x73, 0x73, 0x63};
+        payload = new byte[] {0x73, 0x73, 0x63};
         tokens = serial.stream(new Tokenizer(ByteStream.raw(payload)));
         assertEquals(3, tokens.length);
 
         serial.clean();
         serial.oneOrMore(LatinSmallLetterS.class);
         serial.oneOrMore(LatinSmallLetterC.class);
-        payload = new byte[]{0x73, 0x63, 0x63};
+        payload = new byte[] {0x73, 0x63, 0x63};
         tokens = serial.stream(new Tokenizer(ByteStream.raw(payload)));
         assertEquals(3, tokens.length);
     }
@@ -266,30 +270,31 @@ class SerialTest {
         var e =
                 assertThrows(
                         BuzzCantSerialize.class,
-                        () -> serial.stream(new Tokenizer(ByteStream.raw(new byte[]{0x30})))
-                );
-        String ex = """
+                        () -> serial.stream(new Tokenizer(ByteStream.raw(new byte[] {0x30}))));
+        String ex =
+                """
                 🦕 [0x72]
                 🐝 [BuzzCantSerialize]
                 🌵 > Atual visitante [DigitOne] encontrou token [0x30] inesperado;
                   > Tokens esperados são [0x31]
                 """;
         String x = e.getMessage().replaceAll("\u001B\\[[;\\d]*m", "");
-        assertEquals(ex,
-                x
-        );
+        assertEquals(ex, x);
 
         serial.clean();
         serial.oneOrMore(DigitZero.class);
         serial.oneOrMore(DigitOne.class);
-        e = assertThrows(
-                BuzzCantSerialize.class,
-                () -> serial.stream(new Tokenizer(ByteStream.raw(new byte[]{0x30})))
-        );
-        assertEquals("""
+        e =
+                assertThrows(
+                        BuzzCantSerialize.class,
+                        () -> serial.stream(new Tokenizer(ByteStream.raw(new byte[] {0x30}))));
+        assertEquals(
+                """
                 🦕 [0x72]
                 🐝 [BuzzCantSerialize]
-                🌵 > acabou a fita mas sobrou visitante""", e.getMessage());
+                🌵 > acabou a fita mas sobrou visitante\
+                """,
+                e.getMessage());
     }
 
     @Test
@@ -297,7 +302,7 @@ class SerialTest {
         Serial serial = new Serial();
         serial.oneOrMore(LatinSmallLetterS.class);
 
-        byte[] payload = new byte[]{0x73, 0x63};
+        byte[] payload = new byte[] {0x73, 0x63};
 
         Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
         Token[] tokens = serial.stream(tokenizer);
@@ -353,7 +358,7 @@ class SerialTest {
         assertEquals(2, tokenizer.pointer());
 
         // --------------------------------------------------------------------------------------------------
-        payload = new byte[]{0x73, 0x73, 0x73, 0x63, 0x63, 0x63};
+        payload = new byte[] {0x73, 0x73, 0x73, 0x63, 0x63, 0x63};
         // --------------------------------------------------------------------------------------------------
         serial.clean();
         serial.oneOrMore(LatinSmallLetterS.class);
@@ -447,5 +452,107 @@ class SerialTest {
                 tokens[5].toString());
         assertFalse(tokenizer.ready());
         assertEquals(6, tokenizer.pointer());
+    }
+
+    @Test
+    void happyClean() {
+        Serial serial = new Serial();
+        serial.one(DigitZero.class);
+        serial.one(DigitOne.class);
+        byte[] payload = new byte[] {0x30, 0x31, 0x30, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        serial.stream(tokenizer);
+        assertEquals(2, tokenizer.pointer());
+
+        serial.clean();
+        serial.one(DigitZero.class);
+        serial.one(DigitOne.class);
+        serial.stream(tokenizer);
+        assertEquals(4, tokenizer.pointer());
+    }
+
+    @Test
+    void happyReset() {
+        Serial serial = new Serial();
+        serial.one(DigitZero.class);
+        serial.one(DigitOne.class);
+        byte[] payload = new byte[] {0x30, 0x31, 0x30, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        serial.stream(tokenizer);
+        assertEquals(2, tokenizer.pointer());
+
+        serial.reset();
+        serial.stream(tokenizer);
+        assertEquals(4, tokenizer.pointer());
+    }
+
+    @Test
+    void happySerialOneOrMore() {
+        Serial serial = new Serial(Quantifier.ONE_OR_MORE);
+        serial.one(DigitZero.class);
+        serial.one(DigitOne.class);
+        byte[] payload = new byte[] {0x30, 0x31, 0x30, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        serial.stream(tokenizer);
+        assertEquals(4, tokenizer.pointer());
+    }
+
+    @Test
+    void happyReject() {
+        Serial serial = new Serial();
+        serial.reject(DigitZero.class);
+        serial.one(DigitOne.class);
+        byte[] payload = new byte[] {0x31, 0x31, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        serial.stream(tokenizer);
+        assertEquals(1, tokenizer.pointer());
+
+        serial.clean();
+        serial.reject(DigitZero.class);
+        serial.oneOrMore(DigitOne.class);
+        tokenizer = new Tokenizer(ByteStream.raw(payload));
+        serial.stream(tokenizer);
+        assertEquals(3, tokenizer.pointer());
+    }
+
+    @Test
+    void happyRejectThrows() {
+        Serial serial = new Serial();
+        serial.reject(DigitZero.class);
+        serial.one(DigitOne.class);
+        byte[] payload = new byte[] {0x30, 0x31, 0x31, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        assertEquals(0, tokenizer.pointer());
+        var e = assertThrows(RuntimeException.class, () -> serial.stream(tokenizer));
+        assertEquals("rejected token has show up", e.getMessage());
+        assertEquals(0, tokenizer.pointer());
+    }
+
+    @Test
+    void happyRejectStream() {
+        Serial serial = new Serial(Quantifier.ONE_OR_MORE);
+        serial.reject(DigitZero.class);
+        serial.zeroOrMore(DigitOne.class);
+        serial.zeroOrMore(DigitTwo.class);
+        byte[] payload = new byte[] {0x31, 0x31, 0x31, 0x32, 0x30, 0x31};
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(payload));
+        Token[] tokens = serial.stream(tokenizer);
+        assertEquals(4, tokens.length);
+        assertEquals(4, tokenizer.pointer());
+        assertEquals(Kind.DIGIT_ZERO, tokenizer.kind());
+    }
+
+    @Test
+    void sadVisitorTo() {
+        Serial serial = new Serial();
+        serial.know(DigitZero.class);
+        var e = assertThrows(RuntimeException.class, () -> serial.visitorTo(0x30));
+        assertEquals(
+                """
+                🦕 [0x0]
+                🐝 [?]
+                🌵 > serial n implementa visitorTo\
+                """,
+                e.getMessage());
     }
 }

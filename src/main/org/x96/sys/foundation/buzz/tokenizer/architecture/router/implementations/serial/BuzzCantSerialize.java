@@ -22,7 +22,6 @@ public class BuzzCantSerialize extends Buzz {
         super(CODE, BuzzCantSerialize.class.getSimpleName(), "acabou a fita mas sobrou visitante");
     }
 
-
     private static String explain(Tokenizer tokenizer, Step step) {
         final String RED = "\u001B[31m";
         final String GREEN = "\u001B[32m";

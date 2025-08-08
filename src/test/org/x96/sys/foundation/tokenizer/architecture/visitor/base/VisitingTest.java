@@ -3,7 +3,7 @@ package org.x96.sys.foundation.tokenizer.architecture.visitor.base;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 import java.lang.reflect.Method;
 

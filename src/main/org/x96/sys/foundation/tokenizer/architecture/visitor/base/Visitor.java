@@ -1,8 +1,9 @@
 package org.x96.sys.foundation.tokenizer.architecture.visitor.base;
 
+import org.x96.sys.foundation.buzz.tokenizer.architecture.visitor.base.BuzzVisitorMismatch;
+import org.x96.sys.foundation.token.Kind;
+import org.x96.sys.foundation.token.Token;
 import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.token.Kind;
-import org.x96.sys.foundation.tokenizer.token.Token;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -12,9 +13,6 @@ public abstract class Visitor implements Visiting {
     public final LinkedList<Token> tokens;
 
     public Visitor(Tokenizer tokenizer) {
-        if (tokenizer == null) {
-            throw new RuntimeException("BuzzTokenizerRequired");
-        }
         this.tokenizer = tokenizer;
         this.tokens = new LinkedList<>();
     }
@@ -27,14 +25,14 @@ public abstract class Visitor implements Visiting {
 
     public Token[] safeVisit() {
         if (!allowed()) {
-            throw new RuntimeException("BuzzVisitorMismatch");
+            throw new BuzzVisitorMismatch(this, tokenizer);
         } else {
             return visit();
         }
     }
 
-    public Kind overkind() {
-        return kind();
+    public String overkind() {
+        return kind().toString();
     }
 
     public byte look() {
@@ -49,8 +47,8 @@ public abstract class Visitor implements Visiting {
         rec(overkind());
     }
 
-    public void rec(Kind kind) {
-        tokens.add(tokenizer.tokenize(kind));
+    public void rec(String overKind) {
+        tokens.add(tokenizer.tokenize(overKind));
     }
 
     public void push(Token[] tokenArray) {

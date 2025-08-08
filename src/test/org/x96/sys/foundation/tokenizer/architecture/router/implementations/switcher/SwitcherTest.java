@@ -8,7 +8,7 @@ import org.x96.sys.foundation.io.ByteStream;
 import org.x96.sys.foundation.tokenizer.Tokenizer;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Etx;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 class SwitcherTest {
     @Test
