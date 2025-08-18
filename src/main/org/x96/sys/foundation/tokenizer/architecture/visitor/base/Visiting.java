@@ -1,6 +1,6 @@
 package org.x96.sys.foundation.tokenizer.architecture.visitor.base;
 
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 /**
  * Interface base para visitantes de tokens. Cada visitante é independente e pode processar
@@ -14,6 +14,10 @@ public interface Visiting {
      * @return true se pode processar, false caso contrário
      */
     boolean allowed();
+
+    default boolean denied() {
+        return !allowed();
+    }
 
     /**
      * Processa o lexer a partir da posição atual. O visitante tem controle total sobre o avanço do

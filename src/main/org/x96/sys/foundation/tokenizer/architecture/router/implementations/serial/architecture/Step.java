@@ -15,9 +15,6 @@ public class Step {
 
     @Override
     public String toString() {
-        return String.format(
-                "%s; %s",
-                quantifier, visitor.getSimpleName()
-        );
+        return String.format("%s; %s", quantifier, visitor.getSimpleName());
     }
 }

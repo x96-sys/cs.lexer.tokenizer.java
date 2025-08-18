@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 import java.lang.reflect.Method;
 
@@ -25,5 +25,20 @@ class RoutingTest {
 
         Method clean = clazz.getMethod("clean");
         assertEquals(void.class, clean.getReturnType());
+    }
+
+    @Test
+    void testRoutingClassMethods() throws NoSuchFieldException, IllegalAccessException {
+        Router r =
+                new Router() {
+                    @Override
+                    public Token[] stream(Tokenizer tokenizer) {
+                        return new Token[0];
+                    }
+                };
+        assertNull(r.dispatcher);
+        assertFalse(r.analyzed);
+        var e = assertThrows(RuntimeException.class, () -> r.visitorTo(0x0));
+        assertEquals("deve ser implementado na classe filha", e.getMessage());
     }
 }

@@ -9,7 +9,7 @@ import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.ter
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterE;
-import org.x96.sys.foundation.tokenizer.token.Token;
+import org.x96.sys.foundation.token.Token;
 
 class OracleTest {
 
@@ -58,7 +58,6 @@ class OracleTest {
                 "Token { Kind[LATIN_SMALL_LETTER_I] Lexeme[0x69] Span[{1:7 7}:{1:8 8}] }",
                 tokens[7].toString());
 
-
         oracle.clean();
         oracle.know(LatinSmallLetterC.class);
         assertEquals(1, oracle.stream(new Tokenizer(ByteStream.raw(payload))).length);
@@ -67,6 +66,5 @@ class OracleTest {
         oracle.know(LatinSmallLetterE.class);
         oracle.know(LatinSmallLetterC.class);
         assertEquals(3, oracle.stream(new Tokenizer(ByteStream.raw(payload))).length);
-
     }
 }

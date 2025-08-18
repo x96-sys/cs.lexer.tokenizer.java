@@ -3,13 +3,13 @@ package org.x96.sys.foundation.tokenizer.architecture.router.implementations.ser
 import org.x96.sys.foundation.buzz.Buzz;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial.BuzzCantSerialize;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial.BuzzUnexpectedTokenForVisitor;
+import org.x96.sys.foundation.token.Token;
 import org.x96.sys.foundation.tokenizer.Tokenizer;
 import org.x96.sys.foundation.tokenizer.architecture.factory.ReflectiveVisitorFactory;
 import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
 import org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture.Quantifier;
 import org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture.Step;
 import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
-import org.x96.sys.foundation.tokenizer.token.Token;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,8 @@ import java.util.List;
 
 public class Serial extends Router {
     public final List<Step> queued;
+    public final Quantifier quantifier;
+    public int current;
 
     @Override
     public Class<? extends Visitor> visitorTo(int hex) {
@@ -25,10 +27,18 @@ public class Serial extends Router {
 
     public Serial() {
         this.queued = new ArrayList<>();
+        this.quantifier = Quantifier.JUST_ONE;
+        this.current = 0;
+    }
+
+    public Serial(Quantifier quantifier) {
+        this.queued = new ArrayList<>();
+        this.quantifier = quantifier;
+        this.current = 0;
     }
 
     public Step visitorInLine() {
-        return this.queued.getFirst();
+        return this.queued.get(this.current);
     }
 
     @Override
@@ -52,45 +62,82 @@ public class Serial extends Router {
         this.queued.add(new Step(visitorClass, Quantifier.ONE_OR_MORE));
     }
 
+    public void reject(Class<? extends Visitor> visitorClass) {
+        this.queued.add(new Step(visitorClass, Quantifier.REJECT));
+    }
+
+    private void cycle(Tokenizer t, List<Token> l) {
+        try {
+            knock(t, l);
+            afterStream(t);
+            reset();
+        } catch (BuzzUnexpectedTokenForVisitor e) {
+            throw new BuzzCantSerialize(t, visitorInLine(), e);
+        }
+    }
+
     @Override
     public Token[] stream(Tokenizer tokenizer) {
         List<Token> tokens = new ArrayList<>();
-        try {
-            knock(tokenizer, tokens);
-            afterStream(tokenizer);
-        } catch (BuzzUnexpectedTokenForVisitor e) {
-            throw new BuzzCantSerialize(tokenizer, visitorInLine(), e);
+        cycle(tokenizer, tokens);
+        if (this.quantifier == Quantifier.ONE_OR_MORE) {
+            while (tokenizer.ready()
+                    && ((!visitorIsRejected() && initNextVisitor(tokenizer).allowed())
+                            || (visitorIsRejected() && initNextVisitor(tokenizer).denied()))) {
+                cycle(tokenizer, tokens);
+            }
         }
+        return tokens.toArray(Token[]::new);
+    }
 
-        return tokens.toArray(new Token[0]);
+    public void dequeue() {
+        this.current++;
+    }
+
+    public boolean hasNext() {
+        return this.current < this.queued.size();
     }
 
     private void afterStream(Tokenizer t) {
         if (!t.ready()) { // completou stream
-            if (!this.queued.isEmpty() && visitorInLine().count > 0) { // ultimo visitante; e com registro de visita
-                this.queued.removeFirst();
+            if (hasNext()
+                    && visitorInLine().count > 0) { // ultimo visitante; e com registro de visita
+                dequeue();
                 afterStream(t);
             }
-            if (!this.queued.isEmpty()
+            if (hasNext()
                     && (visitorInLine().quantifier == Quantifier.ZERO_OR_MORE
-                    || visitorInLine().quantifier == Quantifier.ZERO_OR_ONE)) { // ultimo visitante podia ser zero
-                this.queued.removeFirst();
+                            || visitorInLine().quantifier
+                                    == Quantifier.ZERO_OR_ONE)) { // ultimo visitante podia ser
+                // zero
+                dequeue();
                 afterStream(t);
             }
-            if (!this.queued.isEmpty()) {
+            if (hasNext()) {
                 throw new BuzzCantSerialize(visitorInLine());
             }
         }
     }
 
+    private Visitor initNextVisitor(Tokenizer t) {
+        Class<? extends Visitor> v = visitorInLine().visitor;
+        return ReflectiveVisitorFactory.happens(v, t);
+    }
+
+    private boolean visitorIsRejected() {
+        return visitorInLine().quantifier.equals(Quantifier.REJECT);
+    }
+
     private void knock(Tokenizer t, List<Token> r) {
-        if (!this.queued.isEmpty()) {
+        if (hasNext()) {
             if (t.ready()) {
-                Class<? extends Visitor> v = visitorInLine().visitor;
                 boolean allowed = false;
-                if (ReflectiveVisitorFactory.happens(v, t).allowed()) {
-                    r.addAll(Arrays.asList(ReflectiveVisitorFactory.happens(v, t).visit()));
+                Visitor visitor = initNextVisitor(t);
+                if (visitor.allowed()) {
                     allowed = true;
+                    if (!visitorIsRejected()) {
+                        r.addAll(Arrays.asList(visitor.visit()));
+                    }
                 }
                 afterVisit(allowed, t);
                 knock(t, r);
@@ -101,13 +148,13 @@ public class Serial extends Router {
     private void afterVisit(boolean allowed, Tokenizer t) {
         switch (visitorInLine().quantifier) {
             case ZERO_OR_ONE -> {
-                this.queued.removeFirst();
+                dequeue();
             }
             case JUST_ONE -> {
                 if (!allowed) {
                     throw new BuzzUnexpectedTokenForVisitor(visitorInLine());
                 } else {
-                    this.queued.removeFirst();
+                    dequeue();
                 }
             }
             case ONE_OR_MORE -> {
@@ -117,7 +164,7 @@ public class Serial extends Router {
                     if (visitorInLine().count == 0) {
                         throw new BuzzUnexpectedTokenForVisitor(visitorInLine());
                     } else {
-                        this.queued.removeFirst();
+                        dequeue();
                     }
                 }
             }
@@ -125,7 +172,14 @@ public class Serial extends Router {
                 if (allowed) {
                     visitorInLine().count += 1;
                 } else {
-                    this.queued.removeFirst();
+                    dequeue();
+                }
+            }
+            case REJECT -> {
+                if (allowed) {
+                    throw new RuntimeException("rejected token has show up");
+                } else {
+                    dequeue();
                 }
             }
         }
@@ -134,21 +188,22 @@ public class Serial extends Router {
     @Override
     public void clean() {
         this.queued.clear();
+        this.current = 0;
+    }
+
+    public void reset() {
+        for (Step step : this.queued) {
+            step.count = 0;
+        }
+        this.current = 0;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format(
-                "- Current Serial [%s]",
-                this.queued.size()
-        ));
+        sb.append(String.format("- Current Serial [%s]", this.queued.size()));
         for (int i = 0; i < this.queued.size(); i++) {
-            sb.append(String.format(
-                    "%n  %s => [%s]",
-                    i,
-                    this.queued.get(i).toString()
-            ));
+            sb.append(String.format("%n  %s => [%s]", i, this.queued.get(i).toString()));
         }
         return sb.toString().strip();
     }

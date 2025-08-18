@@ -1,8 +1,5 @@
 package org.x96.sys.foundation.buzz;
 
-
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Buzz extends RuntimeException {
 
     public static final String ANSI_RESET = "\u001B[0m";
@@ -36,8 +33,6 @@ public class Buzz extends RuntimeException {
     public Buzz(String msg) {
         this(0, "?", msg, null);
     }
-
-
 
     public static String format(int code, String bee, String msg) {
 

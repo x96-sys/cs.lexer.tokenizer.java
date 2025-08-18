@@ -1,12 +1,12 @@
 package org.x96.sys.foundation.tokenizer;
 
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.tokenizer.token.Kind;
-import org.x96.sys.foundation.tokenizer.token.Token;
-import org.x96.sys.foundation.tokenizer.token.architecture.CalcPosition;
-import org.x96.sys.foundation.tokenizer.token.architecture.Lexeme;
-import org.x96.sys.foundation.tokenizer.token.architecture.span.Position;
-import org.x96.sys.foundation.tokenizer.token.architecture.span.Span;
+import org.x96.sys.foundation.token.Kind;
+import org.x96.sys.foundation.token.Token;
+import org.x96.sys.foundation.token.architecture.CalcPosition;
+import org.x96.sys.foundation.token.architecture.Lexeme;
+import org.x96.sys.foundation.token.architecture.span.Position;
+import org.x96.sys.foundation.token.architecture.span.Span;
 
 public class Tokenizer {
     private final ByteStream byteStream;
@@ -43,13 +43,14 @@ public class Tokenizer {
         return Kind.is(look());
     }
 
-    public Token tokenize() {
-        return tokenize(kind());
+    public Token tokenize(String overKind) {
+        return tokenize().overKind(overKind);
     }
 
-    public Token tokenize(Kind kind) {
+    public Token tokenize() {
         Position start = position();
         byte hex = look();
+        Kind kind = kind();
         advance();
         Position end = calc.getPosition(this.cursor);
         Span span = new Span(start, end);
