@@ -40,7 +40,7 @@ class MakeJavaVisitorTest
   end
 end
 
-origin = "org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals"
+origin = "org.x96.sys.foundation.cs.lexer.visitor.entry.terminals"
 path = "./src/test/" + origin.gsub(".", "/")
 Dir.mkdir(path) unless Dir.exist?(path)
 
@@ -55,9 +55,9 @@ for i in kinds.length.times
     m = MakeJavaVisitorTest.new
     m.pkg = pkg
     m.imports << "org.x96.sys.foundation.io.ByteStream"
-    m.imports << "org.x96.sys.foundation.tokenizer.Tokenizer"
-    m.imports << "org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor"
-    m.imports << "org.x96.sys.foundation.token.Kind"
+    m.imports << "org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer"
+    m.imports << "org.x96.sys.foundation.cs.lexer.visitor.Visitor"
+    m.imports << "org.x96.sys.foundation.cs.lexer.token.Kind"
     m.imports << "static org.junit.jupiter.api.Assertions.*"
     m.imports << "org.junit.jupiter.api.Test"
     m.name = n
