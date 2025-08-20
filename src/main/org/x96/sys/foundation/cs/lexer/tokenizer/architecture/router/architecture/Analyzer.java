@@ -1,13 +1,13 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.architecture;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.architecture;
 
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAmbiguousVisitor;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAnalyzerEmpty;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.factory.ReflectiveVisitorFactory;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Router;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visiting;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.factory.ReflectiveVisitorFactory;
-import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visiting;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
 
 import java.util.LinkedList;
 import java.util.List;

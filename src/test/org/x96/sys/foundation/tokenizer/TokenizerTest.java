@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.x96.sys.foundation.cs.lexer.token.Kind;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.token.architecture.span.Position;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.token.Kind;
-import org.x96.sys.foundation.token.Token;
-import org.x96.sys.foundation.token.architecture.span.Position;
 
 import java.util.ArrayList;
 import java.util.List;

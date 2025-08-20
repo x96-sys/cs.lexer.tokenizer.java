@@ -1,11 +1,11 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.architecture;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.architecture;
 
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAmbiguousRouting;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAmbiguousVisitor;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAnalyzerEmpty;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzRouterVisitorsEmpty;
-import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Router;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 import java.util.Map;
 

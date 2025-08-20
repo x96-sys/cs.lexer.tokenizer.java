@@ -1,7 +1,7 @@
 package org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial;
 
 import org.x96.sys.foundation.buzz.Buzz;
-import org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture.Step;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.serial.architecture.Step;
 
 public class BuzzUnexpectedTokenForVisitor extends Buzz {
     public static final int CODE = 0x71;

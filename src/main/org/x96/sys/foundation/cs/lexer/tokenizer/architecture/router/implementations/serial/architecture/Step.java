@@ -1,6 +1,6 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.serial.architecture;
 
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 public class Step {
     public final Class<? extends Visitor> visitor;

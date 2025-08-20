@@ -3,14 +3,19 @@ package org.x96.sys.foundation.tokenizer.architecture.router.implementations.ora
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.oracle.Oracle;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.Terminal;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterE;
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.Terminal;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterE;
-import org.x96.sys.foundation.token.Token;
 
+// import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.Terminal;
+// import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.DigitZero;
+// import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.LatinSmallLetterC;
+// import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.LatinSmallLetterE;
 class OracleTest {
 
     @Test

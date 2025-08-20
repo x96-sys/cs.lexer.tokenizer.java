@@ -1,10 +1,10 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.implementations.oracle;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.oracle;
 
-import org.x96.sys.foundation.token.Token;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.factory.ReflectiveVisitorFactory;
-import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.factory.ReflectiveVisitorFactory;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Router;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,8 +3,10 @@ package org.x96.sys.foundation.tokenizer.architecture.router.base;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.token.Token;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Router;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Routing;
 
 import java.lang.reflect.Method;
 

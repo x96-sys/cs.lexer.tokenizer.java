@@ -1,4 +1,4 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.serial.architecture;
 
 public enum Quantifier {
     JUST_ONE, // default

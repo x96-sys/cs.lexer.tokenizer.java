@@ -8,20 +8,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.serial.BuzzCantSerialize;
+import org.x96.sys.foundation.cs.lexer.token.Kind;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.serial.Serial;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.serial.architecture.Quantifier;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c0.Etx;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c0.Lf;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c3.DigitOne;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c3.DigitTwo;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterA;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c7.LatinSmallLetterS;
 import org.x96.sys.foundation.io.ByteStream;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.router.implementations.serial.architecture.Quantifier;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Etx;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Lf;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitOne;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitTwo;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c3.DigitZero;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterA;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c6.LatinSmallLetterC;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c7.LatinSmallLetterS;
-import org.x96.sys.foundation.token.Kind;
-import org.x96.sys.foundation.token.Token;
 
 class SerialTest {
     @Test

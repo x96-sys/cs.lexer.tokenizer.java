@@ -1,6 +1,6 @@
-package org.x96.sys.foundation.tokenizer.architecture.visitor.base;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base;
 
-import org.x96.sys.foundation.token.Token;
+import org.x96.sys.foundation.cs.lexer.token.Token;
 
 /**
  * Interface base para visitantes de tokens. Cada visitante é independente e pode processar

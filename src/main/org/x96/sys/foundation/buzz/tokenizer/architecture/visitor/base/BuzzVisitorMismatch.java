@@ -1,9 +1,9 @@
 package org.x96.sys.foundation.buzz.tokenizer.architecture.visitor.base;
 
 import org.x96.sys.foundation.buzz.Buzz;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.router.architecture.Analyzer;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.architecture.Analyzer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 import java.util.LinkedList;
 import java.util.List;

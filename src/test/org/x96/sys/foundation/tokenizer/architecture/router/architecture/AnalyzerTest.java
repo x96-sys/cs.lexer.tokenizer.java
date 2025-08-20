@@ -5,11 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAmbiguousVisitor;
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.architecture.BuzzAnalyzerEmpty;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.router.base.Router;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.Terminal;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
-import org.x96.sys.foundation.token.Token;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.architecture.Analyzer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base.Router;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.Terminal;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals.c0.Stx;
 
 class AnalyzerTest {
 

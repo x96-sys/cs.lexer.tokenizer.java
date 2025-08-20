@@ -23,23 +23,27 @@ GJF_VERSION   = 1.28.0
 GJF_JAR       = $(TOOL_DIR)/google-java-format.jar
 GJF_URL       = https://maven.org/maven2/com/google/googlejavaformat/google-java-format/$(GJF_VERSION)/google-java-format-$(GJF_VERSION)-all-deps.jar
 
-FLUX_VERSION  = 1.0.1
-FLUX_JAR      = $(LIB_DIR)/org.x96.sys.foundation.io.jar
-FLUX_URL      = https://github.com/x96-sys/flux.java/releases/download/v$(FLUX_VERSION)/org.x96.sys.foundation.io.jar
+CS_FLUX_VERSION  = 1.0.1
+CS_FLUX_JAR      = $(LIB_DIR)/org.x96.sys.foundation.io.jar
+CS_FLUX_URL      = https://github.com/x96-sys/flux.java/releases/download/v$(CS_FLUX_VERSION)/org.x96.sys.foundation.io.jar
 
-TOKEN_VERSION = 0.1.2
-TOKEN_JAR = $(LIB_DIR)/org.x96.sys.foundation.token.jar
-TOKEN_URL = https://github.com/x96-sys/token.java/releases/download/v$(TOKEN_VERSION)/org.x96.sys.foundation.token.jar
+CS_TOKEN_VERSION = 0.1.3
+CS_TOKEN_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.token.jar
+CS_TOKEN_URL     = https://github.com/x96-sys/cs.lexer.token.java/releases/download/v0.1.3/org.x96.sys.foundation.cs.lexer.token.jar
 
-JAVA_SOURCES := $(shell find $(SRC_MAIN) -name "*.java")
+CS_KIND_VERSION = 0.1.3
+CS_KIND_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.token.kind.jar
+CS_KIND_URL     = https://github.com/x96-sys/cs.lexer.token.kind.java/releases/download/0.1.3/org.x96.sys.foundation.cs.lexer.token.kind.jar
+
+JAVA_SOURCES = $(shell find $(SRC_MAIN) -name "*.java")
 
 DISTRO_JAR = org.x96.sys.foundation.tokenizer.jar
 
 # Target principal que depende dos arquivos .class
-build: generate-build-info lib/token lib/flux compile-all
+build: generate-build-info lib/flux lib/cs-token lib/cs-kind compile-all
 
 compile-all: | $(MAIN_BUILD)
-	@javac -d $(MAIN_BUILD) -cp $(TOKEN_JAR):$(FLUX_JAR) $(JAVA_SOURCES)
+	@javac -d $(MAIN_BUILD) -cp $(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) $(JAVA_SOURCES)
 	@echo "✅ Compilação concluída com sucesso!"
 
 distro: lib
@@ -52,30 +56,30 @@ $(MAIN_BUILD):
 
 build-cli: build
 	mkdir -p $(CLI_BUILD)
-	javac -cp $(MAIN_BUILD):$(FLUX_JAR):$(TOKEN_JAR) -d $(CLI_BUILD) \
+	javac -cp $(MAIN_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) -d $(CLI_BUILD) \
 	    $(SRC_CLI)/org/x96/sys/foundation/CLI.java
 
 cli: build-cli
-	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(FLUX_JAR):$(TOKEN_JAR) org.x96.sys.foundation.CLI $(ARGS)
+	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) org.x96.sys.foundation.CLI $(ARGS)
 
 $(TEST_BUILD):
 	mkdir -p $(TEST_BUILD)
 
 build-test: build build-cli tools/junit | $(TEST_BUILD)
-	javac -cp $(MAIN_BUILD):$(CLI_BUILD):$(TOKEN_JAR):$(FLUX_JAR):$(JUNIT_JAR) -d $(TEST_BUILD) \
+	javac -cp $(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(JUNIT_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) -d $(TEST_BUILD) \
      $(shell find $(SRC_TEST) -name "*.java")
 
 test: build-test
 	java -jar $(JUNIT_JAR) \
      execute \
-     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(FLUX_JAR):$(TOKEN_JAR) \
+     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) \
      --scan-class-path
 
 coverage-run: build-test tools/jacoco
 	java -javaagent:$(JACOCO_AGENT)=destfile=$(BUILD_DIR)/jacoco.exec \
        -jar $(JUNIT_JAR) \
        execute \
-       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(FLUX_JAR):$(TOKEN_JAR) \
+       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) \
        --scan-class-path
 
 coverage-report: tools/jacoco
@@ -94,11 +98,11 @@ coverage: coverage-run coverage-report
 
 test-method: build-test ## Executa teste específico (METHOD="Classe#método")
 	@echo "🧪 Executando teste: $(METHOD)"
-	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(FLUX_JAR) --select "method:$(METHOD)"
+	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR) --select "method:$(METHOD)"
 
 test-class: build-test ## Executa classe de teste (CLASS="nome.da.Classe")
 	@echo "🧪 Executando classe: $(CLASS)"
-	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(FLUX_JAR) --select "class:$(CLASS)"
+	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR) --select "class:$(CLASS)"
 
 format: tools/gjf ## Formata todo o código fonte Java com google-java-format
 	find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
@@ -109,19 +113,27 @@ lib:
 	@mkdir -p lib
 
 lib/flux: lib
-	@if [ ! -f "$(FLUX_JAR)" ]; then \
-		echo "[📦][flux][🚛][$(FLUX_VERSION)] Downloading Flux"; \
-		curl -sSL -o $(FLUX_JAR) $(FLUX_URL); \
+	@if [ ! -f "$(CS_FLUX_JAR)" ]; then \
+		echo "[📦][flux][🚛][$(CS_FLUX_VERSION)] Downloading Flux"; \
+		curl -sSL -o $(CS_FLUX_JAR) $(CS_FLUX_URL); \
 	else \
-		echo "[📦][flux][✅][$(FLUX_VERSION)] Flux is up to date."; \
+		echo "[📦][flux][✅][$(CS_FLUX_VERSION)] Flux is up to date."; \
 	fi
 
-lib/token: lib
-	@if [ ! -f "$(TOKEN_JAR)" ]; then \
-		echo "[📦][token][🚛][$(TOKEN_VERSION)] Downloading Token"; \
-		curl -sSL -o $(TOKEN_JAR) $(TOKEN_URL); \
+lib/cs-token: lib
+	@if [ ! -f "$(CS_TOKEN_JAR)" ]; then \
+		echo "[📦][cs-token][🚛][$(CS_TOKEN_VERSION)] Downloading CS Token"; \
+		curl -sSL -o $(CS_TOKEN_JAR) $(CS_TOKEN_URL); \
 	else \
-		echo "[📦][token][✅][$(TOKEN_VERSION)] Token is up to date."; \
+		echo "[📦][cs-token][✅][$(CS_TOKEN_VERSION)] CS Token is up to date."; \
+	fi
+
+lib/cs-kind: lib
+	@if [ ! -f "$(CS_KIND_JAR)" ]; then \
+		echo "[📦][cs-kind][🚛][$(CS_KIND_VERSION)] Downloading CS Kind"; \
+		curl -sSL -o $(CS_KIND_JAR) $(CS_KIND_URL); \
+	else \
+		echo "[📦][cs-kind][✅][$(CS_KIND_VERSION)] CS Kind is up to date."; \
 	fi
 
 tools:

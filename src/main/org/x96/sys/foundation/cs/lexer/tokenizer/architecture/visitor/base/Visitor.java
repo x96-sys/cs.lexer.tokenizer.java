@@ -1,9 +1,9 @@
-package org.x96.sys.foundation.tokenizer.architecture.visitor.base;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base;
 
 import org.x96.sys.foundation.buzz.tokenizer.architecture.visitor.base.BuzzVisitorMismatch;
-import org.x96.sys.foundation.token.Kind;
-import org.x96.sys.foundation.token.Token;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.token.Kind;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
 
 import java.util.Arrays;
 import java.util.LinkedList;

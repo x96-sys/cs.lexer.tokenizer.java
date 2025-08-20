@@ -1,8 +1,8 @@
-package org.x96.sys.foundation.tokenizer.architecture.factory;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.factory;
 
 import org.x96.sys.foundation.buzz.Buzz;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

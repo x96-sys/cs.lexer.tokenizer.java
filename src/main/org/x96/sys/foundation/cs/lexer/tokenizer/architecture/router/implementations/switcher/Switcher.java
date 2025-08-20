@@ -1,11 +1,11 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.implementations.switcher;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.switcher;
 
 import org.x96.sys.foundation.buzz.tokenizer.architecture.router.implementations.switcher.BuzzSwitcherEmpty;
-import org.x96.sys.foundation.token.Token;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.factory.ReflectiveVisitorFactory;
-import org.x96.sys.foundation.tokenizer.architecture.router.implementations.oracle.Oracle;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.token.Token;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.factory.ReflectiveVisitorFactory;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.implementations.oracle.Oracle;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 public class Switcher extends Oracle {
 

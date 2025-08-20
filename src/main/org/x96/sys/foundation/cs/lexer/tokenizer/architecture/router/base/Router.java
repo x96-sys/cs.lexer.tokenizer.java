@@ -1,7 +1,7 @@
-package org.x96.sys.foundation.tokenizer.architecture.router.base;
+package org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.base;
 
-import org.x96.sys.foundation.tokenizer.architecture.router.architecture.Dispatcher;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.router.architecture.Dispatcher;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor;
 
 import java.util.Arrays;
 
