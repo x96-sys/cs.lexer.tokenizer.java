@@ -1,6 +1,6 @@
 package org.x96.sys.foundation;
 
-import org.x96.sys.foundation.token.Kind;
+import org.x96.sys.foundation.cs.lexer.token.Kind;
 
 public class CLI {
     public static void main(String[] args) {

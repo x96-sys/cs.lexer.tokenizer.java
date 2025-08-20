@@ -3,15 +3,11 @@
 [Implementation of](https://github.com/x96-sys/tokenizer)
 
 ```bash
-make generate-kind
-```
-
-```bash
-make generate-kind-test
-```
-
-```bash
 make generate-terminal-visitors
+```
+
+```bash
+ruby scripts/visitorsTest.rb
 ```
 
 ```bash

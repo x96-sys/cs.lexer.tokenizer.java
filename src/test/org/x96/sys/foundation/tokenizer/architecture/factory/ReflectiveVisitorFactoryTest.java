@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.buzz.Buzz;
-import org.x96.sys.foundation.tokenizer.Tokenizer;
-import org.x96.sys.foundation.tokenizer.architecture.visitor.base.Visitor;
+import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
+import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.factory.ReflectiveVisitorFactory;
+import org.x96.sys.foundation.cs.lexer.visitor.Visitor;
 
 class ReflectiveVisitorFactoryTest {
 
@@ -24,10 +25,10 @@ class ReflectiveVisitorFactoryTest {
         var e = assertThrows(Buzz.class, () -> ReflectiveVisitorFactory.happens(Dv1.class, null));
         assertEquals(
                 """
-                🦕 [0x0]
-                🐝 [?]
-                🌵 > Não foi possível construir visitante\
-                """,
+                        🦕 [0x0]
+                        🐝 [?]
+                        🌵 > Não foi possível construir visitante\
+                        """,
                 e.getMessage());
     }
 }

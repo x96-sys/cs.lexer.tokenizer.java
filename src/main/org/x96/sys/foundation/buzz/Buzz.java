@@ -8,25 +8,16 @@ public class Buzz extends RuntimeException {
 
     // 🐞
     private static final String[] BUGS = {
-        "🐞", "🕷️", "🪲", "🐜", "🦟", "🐝", "🦋", "🦖", "🦕", "🌵"
+            "🐞", "🕷️", "🪲", "🐜", "🦟", "🐝", "🦋", "🦖", "🦕", "🌵"
     };
 
-    public Buzz(String message, Buzz cause) {
-        super(message, cause);
-    }
-
-    /*─────────────────────────────────────────────────────────────*/
-    /* Construtores                                                */
-    /*─────────────────────────────────────────────────────────────*/
+    /* ───────────────────────────────────────────────────────────── */
+    /* Construtores */
+    /* ───────────────────────────────────────────────────────────── */
 
     /** Construtor principal com cause opcional. */
     protected Buzz(int code, String bee, String msg, Throwable cause) {
         super(format(code, bee, msg), cause);
-    }
-
-    /** Construtor sem cause. */
-    public Buzz(int code, String bee, String msg) {
-        this(code, bee, msg, null);
     }
 
     /** Construtor apenas com mensagem (código 0). */
@@ -38,9 +29,5 @@ public class Buzz extends RuntimeException {
 
         return String.format(
                 "%s [0x%X]%n%s [%s]%n%s > %s", BUGS[8], code, BUGS[5], bee, BUGS[9], msg);
-    }
-
-    public static String hex(int n) {
-        return String.format("0x%X", n);
     }
 }
