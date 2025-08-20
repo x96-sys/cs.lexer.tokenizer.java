@@ -37,49 +37,52 @@ CS_KIND_URL     = https://github.com/x96-sys/cs.lexer.token.kind.java/releases/d
 
 JAVA_SOURCES = $(shell find $(SRC_MAIN) -name "*.java")
 
-DISTRO_JAR = org.x96.sys.foundation.tokenizer.jar
+DISTRO_JAR = org.x96.sys.foundation.cs.lexer.tokenizer.jar
+
+CP = $(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR)
+
+# Cria o diretório de build
+$(MAIN_BUILD):
+	@mkdir -p $(MAIN_BUILD)
+
+$(TEST_BUILD):
+	@mkdir -p $(TEST_BUILD)
 
 # Target principal que depende dos arquivos .class
 build: generate-build-info lib/flux lib/cs-token lib/cs-kind compile-all
 
 compile-all: | $(MAIN_BUILD)
-	@javac -d $(MAIN_BUILD) -cp $(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) $(JAVA_SOURCES)
+	@javac -d $(MAIN_BUILD) -cp $(CP) $(JAVA_SOURCES)
 	@echo "✅ Compilação concluída com sucesso!"
 
 distro: lib
 	@jar cf $(DISTRO_JAR) -C $(MAIN_BUILD) .
 	@echo "✅ Distribuição criada com sucesso! $(DISTRO_JAR)"
 
-# Cria o diretório de build
-$(MAIN_BUILD):
-	mkdir -p $(MAIN_BUILD)
-
 build-cli: build
 	mkdir -p $(CLI_BUILD)
-	javac -cp $(MAIN_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) -d $(CLI_BUILD) \
+	javac -cp $(MAIN_BUILD):$(CP) -d $(CLI_BUILD) \
 	    $(SRC_CLI)/org/x96/sys/foundation/CLI.java
 
 cli: build-cli
-	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) org.x96.sys.foundation.CLI $(ARGS)
+	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CP) org.x96.sys.foundation.CLI $(ARGS)
 
-$(TEST_BUILD):
-	mkdir -p $(TEST_BUILD)
 
 build-test: build build-cli tools/junit | $(TEST_BUILD)
-	javac -cp $(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(JUNIT_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) -d $(TEST_BUILD) \
+	javac -cp $(JUNIT_JAR):$(MAIN_BUILD):$(CLI_BUILD):$(CP) -d $(TEST_BUILD) \
      $(shell find $(SRC_TEST) -name "*.java")
 
 test: build-test
 	java -jar $(JUNIT_JAR) \
      execute \
-     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) \
+     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
      --scan-class-path
 
 coverage-run: build-test tools/jacoco
 	java -javaagent:$(JACOCO_AGENT)=destfile=$(BUILD_DIR)/jacoco.exec \
        -jar $(JUNIT_JAR) \
        execute \
-       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR) \
+       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
        --scan-class-path
 
 coverage-report: tools/jacoco
@@ -98,11 +101,11 @@ coverage: coverage-run coverage-report
 
 test-method: build-test ## Executa teste específico (METHOD="Classe#método")
 	@echo "🧪 Executando teste: $(METHOD)"
-	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR) --select "method:$(METHOD)"
+	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CP) --select "method:$(METHOD)"
 
 test-class: build-test ## Executa classe de teste (CLASS="nome.da.Classe")
 	@echo "🧪 Executando classe: $(CLASS)"
-	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CS_FLUX_JAR) --select "class:$(CLASS)"
+	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CP) --select "class:$(CLASS)"
 
 format: tools/gjf ## Formata todo o código fonte Java com google-java-format
 	find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
@@ -218,5 +221,6 @@ generate-terminal-visitors:
 
 clean:
 	@rm -rf $(BUILD_DIR) $(TOOL_DIR) $(LIB_DIR)
+	@rm -rf *.jar
 	@echo "[🧹][clean] Build directory cleaned."
 

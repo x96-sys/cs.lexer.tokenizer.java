@@ -1,4 +1,4 @@
-package org.x96.sys.foundation.tokenizer;
+package org.x96.sys.foundation.cs.lexer.tokenizer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.x96.sys.foundation.cs.lexer.token.Kind;
 import org.x96.sys.foundation.cs.lexer.token.Token;
 import org.x96.sys.foundation.cs.lexer.token.architecture.span.Position;
-import org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer;
 import org.x96.sys.foundation.io.ByteStream;
 
 import java.util.ArrayList;

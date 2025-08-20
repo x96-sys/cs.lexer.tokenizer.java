@@ -37,14 +37,14 @@ class MakeJavaVisitor
   end
 end
 
-origin = "org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.implementations.terminals"
+origin = "org.x96.sys.foundation.cs.lexer.visitor.entry.terminals"
 path = "./src/main/" + origin.gsub(".", "/")
 Dir.mkdir(path) unless Dir.exist?(path)
 
 m = MakeJavaVisitor.new
 m.pkg = origin
 m.imports << "org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer"
-m.imports << "org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor"
+m.imports << "org.x96.sys.foundation.cs.lexer.visitor.Visitor"
 m.name = "Terminal"
 m.rule = "true"
 m.build
@@ -63,7 +63,7 @@ for i in kinds.length.times
     m = MakeJavaVisitor.new
     m.pkg = pkg
     m.imports << "org.x96.sys.foundation.cs.lexer.tokenizer.Tokenizer"
-    m.imports << "org.x96.sys.foundation.cs.lexer.tokenizer.architecture.visitor.base.Visitor"
+    m.imports << "org.x96.sys.foundation.cs.lexer.visitor.Visitor"
     m.imports << "org.x96.sys.foundation.cs.lexer.token.Kind"
     m.name = n
     m.rule = "Kind.is#{n}(look())"
