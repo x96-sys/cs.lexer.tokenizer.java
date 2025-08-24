@@ -35,6 +35,17 @@ CS_KIND_VERSION = 0.1.3
 CS_KIND_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.token.kind.jar
 CS_KIND_URL     = https://github.com/x96-sys/cs.lexer.token.kind.java/releases/download/0.1.3/org.x96.sys.foundation.cs.lexer.token.kind.jar
 
+CS_ROUTER_VERSION = 0.1.3
+CS_ROUTER_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.router.jar
+CS_ROUTER_URL     = https://github.com/x96-sys/cs.lexer.router.java/releases/download/v$(CS_ROUTER_VERSION)/org.x96.sys.foundation.cs.lexer.router.jar
+
+CS_VISITOR_VERSION = 0.1.5
+CS_VISITOR_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.visitor.jar
+CS_VISITOR_URL     = https://github.com/x96-sys/cs.lexer.visitor.java/releases/download/v$(CS_VISITOR_VERSION)/org.x96.sys.foundation.cs.lexer.visitor.jar
+
+
+JAVA_SOURCES = $(shell find $(SRC_MAIN) -name "*.java")
+
 JAVA_SOURCES = $(shell find $(SRC_MAIN) -name "*.java")
 
 DISTRO_JAR = org.x96.sys.foundation.cs.lexer.tokenizer.jar
@@ -73,20 +84,20 @@ build-test: build build-cli tools/junit | $(TEST_BUILD)
      $(shell find $(SRC_TEST) -name "*.java")
 
 test: build-test
-	java -jar $(JUNIT_JAR) \
+	@java -jar $(JUNIT_JAR) \
      execute \
      --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
      --scan-class-path
 
 coverage-run: build-test tools/jacoco
-	java -javaagent:$(JACOCO_AGENT)=destfile=$(BUILD_DIR)/jacoco.exec \
+	@java -javaagent:$(JACOCO_AGENT)=destfile=$(BUILD_DIR)/jacoco.exec \
        -jar $(JUNIT_JAR) \
        execute \
        --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
        --scan-class-path
 
 coverage-report: tools/jacoco
-	java -jar $(JACOCO_CLI) report \
+	@java -jar $(JACOCO_CLI) report \
      $(BUILD_DIR)/jacoco.exec \
      --classfiles $(MAIN_BUILD) \
      --classfiles $(CLI_BUILD) \
@@ -108,7 +119,8 @@ test-class: build-test ## Executa classe de teste (CLASS="nome.da.Classe")
 	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CP) --select "class:$(CLASS)"
 
 format: tools/gjf ## Formata todo o código fonte Java com google-java-format
-	find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
+	@find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
+	@echo "✅ Formatação concluída com sucesso!"
 
 build-info: generate-build-info ## Força a regeneração do BuildInfo
 
@@ -142,13 +154,6 @@ lib/cs-kind: lib
 tools:
 	mkdir -p tools
 
-tools/junit: tools
-	@if [ ! -f $(JUNIT_JAR) ]; then \
-       echo "📦 Baixando JUnit..."; \
-       curl -L -o $(JUNIT_JAR) $(JUNIT_URL); \
-    else \
-       echo "✅ JUnit já está em $(JUNIT_JAR)"; \
-    fi
 
 tools/jacoco: tools
 	@if [ ! -f $(JACOCO_CLI) ] || [ ! -f $(JACOCO_AGENT) ]; then \
@@ -218,6 +223,23 @@ generate-terminal-visitors:
 	@echo "🔧 Gerando Terminal Visitors..."
 	ruby scripts/visitors.rb
 	@echo "✅ Kind gerado com sucesso!"
+
+define deps
+$1/$2: $1
+	@if [ ! -f "$$($3_JAR)" ]; then \
+		echo "[📦] [🚛] [$$($3_VERSION)] [$2]"; \
+		curl -sSL -o $$($3_JAR) $$($3_URL); \
+	else \
+		echo "[📦] [✅] [$$($3_VERSION)] [$2]"; \
+	fi
+endef
+
+$(eval $(call deps,lib,flux,CS_FLUX))
+$(eval $(call deps,lib,cs-router,CS_ROUTER))
+$(eval $(call deps,lib,cs-visitor,CS_VISITOR))
+
+$(eval $(call deps,tools,junit,JUNIT))
+
 
 clean:
 	@rm -rf $(BUILD_DIR) $(TOOL_DIR) $(LIB_DIR)

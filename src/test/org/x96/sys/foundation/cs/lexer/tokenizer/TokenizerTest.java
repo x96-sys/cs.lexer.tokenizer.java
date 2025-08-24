@@ -30,8 +30,7 @@ class TokenizerTest {
         assertEquals("a", tokenizer.getLineByNumber(1));
         assertEquals("", tokenizer.getLineByNumber(4));
 
-        input =
-                """
+        input = """
                 example of text
                 with multiples
                 lines\
@@ -46,7 +45,7 @@ class TokenizerTest {
 
     @Test
     void happyOverKind() {
-        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(new byte[] {0x61}));
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(new byte[] { 0x61 }));
         assertEquals(1, tokenizer.length());
         assertTrue(tokenizer.ready());
         assertEquals(Kind.LATIN_SMALL_LETTER_A, tokenizer.kind());
