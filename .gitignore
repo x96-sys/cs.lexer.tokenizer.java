@@ -1,0 +1,6 @@
+build
+lib
+nbproject
+src/main/org/x96/sys/foundation/BuildInfo.java
+build.xml
+manifest.mf
