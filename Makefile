@@ -58,7 +58,10 @@ BUILD_INFO = https://gist.githubusercontent.com/tfs91/d8a380974ee7f640e0692855b6
 JAVA_SOURCES      = $(shell find $(SRC_MAIN) -name "*.java")
 JAVA_TEST_SOURCES = $(shell find $(SRC_TEST) -name "*.java")
 
-DISTRO_JAR = org.x96.sys.lexer.tokenizer.jar
+DISTRO_JAR     = org.x96.sys.lexer.tokenizer.jar
+DISTRO_CLI_JAR = org.x96.sys.lexer.tokenizer.cli.jar
+CLI_PATH      = org/x96/sys/lexer/tokenizer/CLI.java
+CLI_CLASS     = org.x96.sys.lexer.tokenizer.CLI
 
 CP  = $(IO_JAR):$(TOKEN_JAR):$(KIND_JAR)
 CPT = $(IO_JAR):$(TOKEN_JAR):$(KIND_JAR):$(BUZZ_JAR):$(JUNIT_JAR)
@@ -73,14 +76,14 @@ build: libs clean/build/main build/info
 build/cli: build
 	@mkdir -p $(CLI_BUILD)
 	@javac -cp $(MAIN_BUILD):$(CP) -d $(CLI_BUILD) \
-	    $(SRC_CLI)/org/x96/sys/lexer/tokenizer/CLI.java
+	    $(SRC_CLI)/$(CLI_PATH)
 
 build/test: kit build build/cli
 	@javac -cp $(MAIN_BUILD):$(CLI_BUILD):$(CPT) -d $(TEST_BUILD) \
      $(JAVA_TEST_SOURCES)
 
 cli: build/cli
-	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CP) org.x96.sys.lexer.tokenizer.CLI $(ARGS)
+	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CP) ? $(ARGS)
 
 test: build/test
 	@java -jar $(JUNIT_JAR) \
@@ -121,9 +124,16 @@ format: kit
 	@find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
 	@echo "✅ Formatação concluída com sucesso!"
 
-distro: lib
+distro:
 	@jar cf $(DISTRO_JAR) -C $(MAIN_BUILD) .
-	@echo "✅ Distribuição criada com sucesso! $(DISTRO_JAR)"
+	@echo "[📦] [lib] criada com sucesso! $(DISTRO_JAR)"
+
+distro/cli:
+	@echo "Main-Class: $(CLI_CLASS)" > manifest.txt
+	@jar cfm $(DISTRO_CLI_JAR) manifest.txt -C $(CLI_BUILD) . -C $(MAIN_BUILD) .
+	@rm manifest.txt
+	@echo "[📦] [cli] Empacotado com sucesso em $(DISTRO_CLI_JAR)"
+
 
 define deps
 $1/$2: $1
