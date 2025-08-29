@@ -7,78 +7,95 @@ SRC_MAIN      = src/main
 SRC_CLI       = src/cli
 SRC_TEST      = src/test
 
-TOOL_DIR      = tools
+TOOLS_DIR      = tools
 LIB_DIR       = lib
 
+IO_VERSION = 1.1.0
+IO_JAR     = $(LIB_DIR)/org.x96.sys.io.jar
+IO_URL     = https://github.com/x96-sys/io.java/releases/download/v$(IO_VERSION)/org.x96.sys.io.jar
+IO_SHA256  = e18d2fdb894386bd24bb08f178e4a6566d7feadaaf8e96d32bd6d9c5dc63c474
+
+TOKEN_VERSION = 1.0.0
+TOKEN_JAR     = $(LIB_DIR)/org.x96.sys.lexer.token.jar
+TOKEN_URL     = https://github.com/x96-sys/cs.lexer.token.java/releases/download/v$(TOKEN_VERSION)/org.x96.sys.lexer.token.jar
+TOKEN_SHA256  = b58fa314148954ec78d3ead11a434da2670d6d64837807087d2b541190fcf40d
+
+KIND_VERSION = 1.0.0
+KIND_JAR     = $(LIB_DIR)/org.x96.sys.lexer.token.kind.jar
+KIND_URL     = https://github.com/x96-sys/lexer.token.kind.java/releases/download/v$(KIND_VERSION)/org.x96.sys.lexer.token.kind.jar
+KIND_SHA256  = 55d12618cd548099d138cbc1e7beda2b78e6a09382ec725523e82f7eb5a31c69
+
+BUZZ_VERSION = 1.0.0
+BUZZ_JAR     = $(LIB_DIR)/org.x96.sys.buzz.jar
+BUZZ_URL     = https://github.com/x96-sys/buzz.java/releases/download/v$(BUZZ_VERSION)/org.x96.sys.buzz.jar
+BUZZ_SHA256  = c4f30d580a9dea5db83f0dd0256de247ca217e62f401e5c06392c5b61909efa1
+
 JUNIT_VERSION = 1.13.4
-JUNIT_JAR     = $(TOOL_DIR)/junit-platform-console-standalone.jar
+JUNIT_JAR     = $(TOOLS_DIR)/junit-platform-console-standalone.jar
 JUNIT_URL     = https://maven.org/maven2/org/junit/platform/junit-platform-console-standalone/$(JUNIT_VERSION)/junit-platform-console-standalone-$(JUNIT_VERSION).jar
+JUNIT_SHA256  = 3fdfc37e29744a9a67dd5365e81467e26fbde0b7aa204e6f8bbe79eeaa7ae892
 
 JACOCO_VERSION = 0.8.13
-JACOCO_CLI     = $(TOOL_DIR)/jacococli.jar
-JACOCO_AGENT   = $(TOOL_DIR)/jacocoagent-runtime.jar
 JACOCO_BASE    = https://maven.org/maven2/org/jacoco
 
-GJF_VERSION   = 1.28.0
-GJF_JAR       = $(TOOL_DIR)/google-java-format.jar
-GJF_URL       = https://maven.org/maven2/com/google/googlejavaformat/google-java-format/$(GJF_VERSION)/google-java-format-$(GJF_VERSION)-all-deps.jar
+JACOCO_CLI_VERSION = $(JACOCO_VERSION)
+JACOCO_CLI_JAR     = $(TOOLS_DIR)/jacococli.jar
+JACOCO_CLI_URL     = $(JACOCO_BASE)/org.jacoco.cli/$(JACOCO_CLI_VERSION)/org.jacoco.cli-$(JACOCO_CLI_VERSION)-nodeps.jar
+JACOCO_CLI_SHA256  = 8f748683833d4dc4d72cea5d6b43f49344687b831e0582c97bcb9b984e3de0a3
 
-CS_FLUX_VERSION  = 1.0.1
-CS_FLUX_JAR      = $(LIB_DIR)/org.x96.sys.foundation.io.jar
-CS_FLUX_URL      = https://github.com/x96-sys/flux.java/releases/download/v$(CS_FLUX_VERSION)/org.x96.sys.foundation.io.jar
+JACOCO_AGENT_VERSION = $(JACOCO_VERSION)
+JACOCO_AGENT_JAR     = $(TOOLS_DIR)/jacocoagent-runtime.jar
+JACOCO_AGENT_URL     = $(JACOCO_BASE)/org.jacoco.agent/$(JACOCO_AGENT_VERSION)/org.jacoco.agent-$(JACOCO_AGENT_VERSION)-runtime.jar
+JACOCO_AGENT_SHA256  = 47e700ccb0fdb9e27c5241353f8161938f4e53c3561dd35e063c5fe88dc3349b
 
-CS_TOKEN_VERSION = 0.1.3
-CS_TOKEN_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.token.jar
-CS_TOKEN_URL     = https://github.com/x96-sys/cs.lexer.token.java/releases/download/v$(CS_TOKEN_VERSION)/org.x96.sys.foundation.cs.lexer.token.jar
+GJF_VERSION = 1.28.0
+GJF_JAR     = $(TOOLS_DIR)/gjf.jar
+GJF_URL     = https://maven.org/maven2/com/google/googlejavaformat/google-java-format/$(GJF_VERSION)/google-java-format-$(GJF_VERSION)-all-deps.jar
+GJF_SHA256  = 32342e7c1b4600f80df3471da46aee8012d3e1445d5ea1be1fb71289b07cc735
 
-CS_KIND_VERSION = 0.1.3
-CS_KIND_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.token.kind.jar
-CS_KIND_URL     = https://github.com/x96-sys/cs.lexer.token.kind.java/releases/download/$(CS_KIND_VERSION)/org.x96.sys.foundation.cs.lexer.token.kind.jar
+BUILD_INFO = https://gist.githubusercontent.com/tfs91/d8a380974ee7f640e0692855b643ec01/raw/4d3958befd1f77e4d62a4be8133878316e43a061/generate_build_info.rb
 
-CS_VISITOR_VERSION = 0.1.5
-CS_VISITOR_JAR     = $(LIB_DIR)/org.x96.sys.foundation.cs.lexer.visitor.jar
-CS_VISITOR_URL     = https://github.com/x96-sys/cs.lexer.visitor.java/releases/download/v$(CS_VISITOR_VERSION)/org.x96.sys.foundation.cs.lexer.visitor.jar
+JAVA_SOURCES      = $(shell find $(SRC_MAIN) -name "*.java")
+JAVA_TEST_SOURCES = $(shell find $(SRC_TEST) -name "*.java")
 
+DISTRO_JAR = org.x96.sys.lexer.tokenizer.jar
 
-JAVA_SOURCES = $(shell find $(SRC_MAIN) -name "*.java")
+CP  = $(IO_JAR):$(TOKEN_JAR):$(KIND_JAR)
+CPT = $(IO_JAR):$(TOKEN_JAR):$(KIND_JAR):$(BUZZ_JAR):$(JUNIT_JAR)
 
-DISTRO_JAR = org.x96.sys.foundation.cs.lexer.tokenizer.jar
+build/info:
+	@curl -sSL $(BUILD_INFO) | ruby - src/main/ org.x96.sys.lexer.tokenizer
 
-CP = $(CS_FLUX_JAR):$(CS_TOKEN_JAR):$(CS_KIND_JAR):$(CS_VISITOR_JAR)
-
-build: libs clean/build/main generate-build-info
+build: libs clean/build/main build/info
 	@javac -d $(MAIN_BUILD) -cp $(CP) $(JAVA_SOURCES)
 	@echo "[🦾] [compiled] [$(MAIN_BUILD)]"
 
 build/cli: build
 	@mkdir -p $(CLI_BUILD)
 	@javac -cp $(MAIN_BUILD):$(CP) -d $(CLI_BUILD) \
-	    $(SRC_CLI)/org/x96/sys/foundation/CLI.java
+	    $(SRC_CLI)/org/x96/sys/lexer/tokenizer/CLI.java
 
-build/test: build build/cli tools/junit
-	@javac -cp $(JUNIT_JAR):$(MAIN_BUILD):$(CLI_BUILD):$(CP) -d $(TEST_BUILD) \
-     $(shell find $(SRC_TEST) -name "*.java")
-
-
+build/test: kit build build/cli
+	@javac -cp $(MAIN_BUILD):$(CLI_BUILD):$(CPT) -d $(TEST_BUILD) \
+     $(JAVA_TEST_SOURCES)
 
 cli: build/cli
-	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CP) org.x96.sys.foundation.CLI $(ARGS)
-
+	java -cp $(MAIN_BUILD):$(CLI_BUILD):$(CP) org.x96.sys.lexer.tokenizer.CLI $(ARGS)
 
 test: build/test
 	@java -jar $(JUNIT_JAR) \
      execute \
-     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
+     --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CPT) \
      --scan-class-path
 
-coverage-run: build-test tools/jacoco
+coverage-run: build/test
 	@java -javaagent:$(JACOCO_AGENT)=destfile=$(BUILD_DIR)/jacoco.exec \
        -jar $(JUNIT_JAR) \
        execute \
-       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CP) \
+       --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CLI_BUILD):$(CPT) \
        --scan-class-path
 
-coverage-report: tools/jacoco
+coverage-report:
 	@java -jar $(JACOCO_CLI) report \
      $(BUILD_DIR)/jacoco.exec \
      --classfiles $(MAIN_BUILD) \
@@ -92,11 +109,11 @@ coverage: coverage-run coverage-report
 	@echo "✅ Relatório de cobertura disponível em: build/coverage/index.html"
 	@echo "🌐 Abrir com: open build/coverage/index.html"
 
-test-method: build-test ## Executa teste específico (METHOD="Classe#método")
+test-method: build/test ## Executa teste específico (METHOD="Classe#método")
 	@echo "🧪 Executando teste: $(METHOD)"
 	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CP) --select "method:$(METHOD)"
 
-test-class: build-test ## Executa classe de teste (CLASS="nome.da.Classe")
+test-class: build/test ## Executa classe de teste (CLASS="nome.da.Classe")
 	@echo "🧪 Executando classe: $(CLASS)"
 	@java -jar $(JUNIT_JAR) --class-path $(TEST_BUILD):$(MAIN_BUILD):$(CP) --select "class:$(CLASS)"
 
@@ -104,70 +121,61 @@ format: kit
 	@find src -name "*.java" -print0 | xargs -0 java -jar $(GJF_JAR) --aosp --replace
 	@echo "✅ Formatação concluída com sucesso!"
 
-
-
-generate-build-info:
-	@echo "🔧 Gerando BuildInfo..."
-	@mkdir -p $(SRC_MAIN)/org/x96/sys/foundation
-	@printf 'package org.x96.sys.foundation;\n\n' > $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf '/**\n * Informações de build geradas automaticamente pelo Makefile\n * Não edite este arquivo manualmente!\n */\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf 'public final class BuildInfo {\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then \
-    	VERSION=$$(git describe --tags --always --dirty 2>/dev/null || echo "v0.1.0-unknown"); \
-    	if echo "$$VERSION" | grep -q "^v[0-9]"; then \
-      		MAJOR=$$(echo "$$VERSION" | sed 's/^v\([0-9]*\)\..*/\1/'); \
-      		MINOR=$$(echo "$$VERSION" | sed 's/^v[0-9]*\.\([0-9]*\)\..*/\1/'); \
-      		PATCH=$$(echo "$$VERSION" | sed 's/^v[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/'); \
-    	else \
-      		MAJOR="0"; MINOR="1"; PATCH="0"; \
-    	fi; \
-  	else \
-    	VERSION="v0.1.0-no-git"; \
-    	MAJOR="0"; MINOR="1"; PATCH="0"; \
-  	fi; \
-    BUILD_DATE=$$(date '+%Y-%m-%d %H:%M:%S'); \
-    BUILD_USER=$$(whoami); \
-    printf '    public static final String VERSION = "%s";\n' "$$VERSION" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java; \
-    printf '    public static final String BUILD_DATE = "%s";\n' "$$BUILD_DATE" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java; \
-    printf '    public static final String BUILD_USER = "%s";\n' "$$BUILD_USER" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java; \
-    printf '    public static final String VERSION_MAJOR = "%s";\n' "$$MAJOR" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java; \
-    printf '    public static final String VERSION_MINOR = "%s";\n' "$$MINOR" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java; \
-    printf '    public static final String VERSION_PATCH = "%s";\n' "$$PATCH" >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf '\n    private BuildInfo() {\n        // Classe utilitária - não deve ser instanciada\n    }\n\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf '    public static String getFullVersion() {\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf '        return VERSION + " (built on " + BUILD_DATE + " by " + BUILD_USER + ")";\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@printf '    }\n}\n' >> $(SRC_MAIN)/org/x96/sys/foundation/BuildInfo.java
-	@echo "✅ BuildInfo gerado com sucesso!"
-
 distro: lib
 	@jar cf $(DISTRO_JAR) -C $(MAIN_BUILD) .
 	@echo "✅ Distribuição criada com sucesso! $(DISTRO_JAR)"
 
 define deps
 $1/$2: $1
-	@if [ ! -f "$$($3_JAR)" ]; then \
-		echo "[📦] [🚛] [$$($3_VERSION)] [$2]"; \
-		curl -sSL -o $$($3_JAR) $$($3_URL); \
+	@expected="$($3_SHA256)"; \
+	jar="$($3_JAR)"; \
+	url="$($3_URL)"; \
+	tmp="$$$$(mktemp)"; \
+	if [ ! -f "$$$$jar" ]; then \
+		echo "[📦] [🚛] [$($3_VERSION)] [$2]"; \
+		curl -sSL -o "$$$$tmp" "$$$$url"; \
+		actual="$$$$(shasum -a 256 $$$$tmp | awk '{print $$$$1}')"; \
+		if [ "$$$$expected" = "$$$$actual" ]; then mv "$$$$tmp" "$$$$jar"; \
+		echo "[📦] [📍] [$($3_VERSION)] [$2] [🐚]"; else rm "$$$$tmp"; \
+		echo "[❌] [hash mismatch] [$2]"; exit 1; fi; \
 	else \
-		echo "[📦] [📍] [$$($3_VERSION)] [$2]"; \
+		actual="$$$$(shasum -a 256 $$$$jar | awk '{print $$$$1}')"; \
+		if [ "$$$$expected" = "$$$$actual" ]; \
+		then echo "[📦] [📍] [$($3_VERSION)] [🐚] [$2]"; \
+		else \
+			echo "[❌] [hash mismatch] [$2]"; \
+			curl -sSL -o "$$$$tmp" "$$$$url"; \
+			actual="$$$$(shasum -a 256 $$$$tmp | awk '{print $$$$1}')"; \
+			if [ "$$$$expected" = "$$$$actual" ]; then mv "$$$$tmp" "$$$$jar"; \
+			echo "[📦] [♻️] [$($3_VERSION)] [🐚] [$2]"; else rm "$$$$tmp"; \
+			echo "[❌] [download failed] [$2]"; exit 1; fi; \
+		fi; \
 	fi
 endef
 
 libs: \
-	$(LIB_DIR)/flux \
+	$(LIB_DIR)/io \
 	$(LIB_DIR)/token \
 	$(LIB_DIR)/kind \
-	$(LIB_DIR)/visitor
+	$(LIB_DIR)/buzz
 
-$(eval $(call deps,$(LIB_DIR),flux,CS_FLUX))
-$(eval $(call deps,$(LIB_DIR),token,CS_TOKEN))
-$(eval $(call deps,$(LIB_DIR),kind,CS_KIND))
-$(eval $(call deps,$(LIB_DIR),visitor,CS_VISITOR))
+$(eval $(call deps,$(LIB_DIR),io,IO))
+$(eval $(call deps,$(LIB_DIR),token,TOKEN))
+$(eval $(call deps,$(LIB_DIR),kind,KIND))
+$(eval $(call deps,$(LIB_DIR),buzz,BUZZ))
 
-$(eval $(call deps,tools,junit,JUNIT))
+kit: \
+	$(TOOLS_DIR)/junit \
+	$(TOOLS_DIR)/gjf \
+	$(TOOLS_DIR)/jacoco_cli \
+	$(TOOLS_DIR)/jacoco_agent
 
+$(eval $(call deps,$(TOOLS_DIR),junit,JUNIT))
+$(eval $(call deps,$(TOOLS_DIR),gjf,GJF))
+$(eval $(call deps,$(TOOLS_DIR),jacoco_cli,JACOCO_CLI))
+$(eval $(call deps,$(TOOLS_DIR),jacoco_agent,JACOCO_AGENT))
 
-$(BUILD_DIR) $(MAIN_BUILD) $(TEST_BUILD) $(TOOL_DIR) $(LIB_DIR):
+$(BUILD_DIR) $(MAIN_BUILD) $(TEST_BUILD) $(TOOLS_DIR) $(LIB_DIR):
 	mkdir -p $@
 
 clean/build:
@@ -187,8 +195,8 @@ clean/build/cli:
 	@echo "[🧹] [clean] [$(CLI_BUILD)]"
 
 clean/kit:
-	@rm -rf $(TOOL_DIR)
-	@echo "[🛀] [clean] [$(TOOL_DIR)]"
+	@rm -rf $(TOOLS_DIR)
+	@echo "[🛀] [clean] [$(TOOLS_DIR)]"
 
 clean/libs:
 	@rm -rf $(LIB_DIR)

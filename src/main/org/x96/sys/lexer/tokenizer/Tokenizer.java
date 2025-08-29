@@ -1,12 +1,12 @@
-package org.x96.sys.foundation.cs.lexer.tokenizer;
+package org.x96.sys.lexer.tokenizer;
 
-import org.x96.sys.foundation.cs.lexer.token.Kind;
-import org.x96.sys.foundation.cs.lexer.token.Token;
-import org.x96.sys.foundation.cs.lexer.token.architecture.Lexeme;
-import org.x96.sys.foundation.cs.lexer.token.architecture.span.Position;
-import org.x96.sys.foundation.cs.lexer.token.architecture.span.Span;
-import org.x96.sys.foundation.cs.lexer.tokenizer.architecture.CalcPosition;
-import org.x96.sys.foundation.io.ByteStream;
+import org.x96.sys.io.ByteStream;
+import org.x96.sys.lexer.token.Kind;
+import org.x96.sys.lexer.token.Token;
+import org.x96.sys.lexer.token.architecture.Lexeme;
+import org.x96.sys.lexer.token.architecture.span.Position;
+import org.x96.sys.lexer.token.architecture.span.Span;
+import org.x96.sys.lexer.tokenizer.architecture.CalcPosition;
 
 public class Tokenizer {
     private final ByteStream byteStream;

@@ -1,6 +1,6 @@
-package org.x96.sys.foundation;
+package org.x96.sys.lexer.tokenizer;
 
-import org.x96.sys.foundation.cs.lexer.token.Kind;
+import org.x96.sys.lexer.token.Kind;
 
 public class CLI {
     public static void main(String[] args) {
@@ -36,7 +36,7 @@ public class CLI {
     }
 
     private static void printUsage() {
-        System.out.println("Usage: java org.x96.sys.foundation.CLI [options] [text]");
+        System.out.println("Usage: java org.x96.sys.lexer.tokenizer.CLI [options] [text]");
         System.out.println("Options:");
         System.out.println("  -v, --version     Show version");
         System.out.println("  -b, --build-info  Show build information");
@@ -47,11 +47,10 @@ public class CLI {
     private static void printBuildInfo() {
         System.out.println("Build Information:");
         System.out.println("  Version: " + BuildInfo.VERSION);
-        System.out.println("  Build Date: " + BuildInfo.BUILD_DATE);
+        System.out.println("  Build Date: " + BuildInfo.BUILD_TIMESTAMP);
         System.out.println("  Build User: " + BuildInfo.BUILD_USER);
         System.out.println("  Major: " + BuildInfo.VERSION_MAJOR);
         System.out.println("  Minor: " + BuildInfo.VERSION_MINOR);
         System.out.println("  Patch: " + BuildInfo.VERSION_PATCH);
-        System.out.println("  Full: " + BuildInfo.getFullVersion());
     }
 }

@@ -1,7 +1,7 @@
-package org.x96.sys.foundation.cs.lexer.tokenizer.architecture;
+package org.x96.sys.lexer.tokenizer.architecture;
 
-import org.x96.sys.foundation.cs.lexer.token.architecture.span.Position;
-import org.x96.sys.foundation.io.ByteStream;
+import org.x96.sys.io.ByteStream;
+import org.x96.sys.lexer.token.architecture.span.Position;
 
 import java.util.ArrayList;
 
@@ -23,8 +23,7 @@ public class CalcPosition {
     }
 
     private int getLine(int offset) {
-        if (offset == 0)
-            return 0;
+        if (offset == 0) return 0;
 
         int low = 0;
         int high = line_starts.length - 1;
@@ -45,10 +44,8 @@ public class CalcPosition {
 
     private int getColumn(int offset) {
         int line = getLine(offset);
-        if (line == 0)
-            return 0;
-        if (line == 1)
-            return offset;
+        if (line == 0) return 0;
+        if (line == 1) return offset;
         return offset - line_starts[line - 2];
     }
 }

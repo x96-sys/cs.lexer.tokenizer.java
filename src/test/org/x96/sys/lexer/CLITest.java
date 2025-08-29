@@ -1,10 +1,12 @@
-package org.x96.sys.foundation;
+package org.x96.sys.lexer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.x96.sys.lexer.tokenizer.BuildInfo;
+import org.x96.sys.lexer.tokenizer.CLI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -44,12 +46,11 @@ public class CLITest {
         String output = outContent.toString();
         assertTrue(output.contains("Build Information:"));
         assertTrue(output.contains("Version: " + BuildInfo.VERSION));
-        assertTrue(output.contains("Build Date: " + BuildInfo.BUILD_DATE));
+        assertTrue(output.contains("Build Date: " + BuildInfo.BUILD_TIMESTAMP));
         assertTrue(output.contains("Build User: " + BuildInfo.BUILD_USER));
         assertTrue(output.contains("Major: " + BuildInfo.VERSION_MAJOR));
         assertTrue(output.contains("Minor: " + BuildInfo.VERSION_MINOR));
         assertTrue(output.contains("Patch: " + BuildInfo.VERSION_PATCH));
-        assertTrue(output.contains("Full: " + BuildInfo.getFullVersion()));
     }
 
     @Test

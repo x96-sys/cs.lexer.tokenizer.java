@@ -1,11 +1,11 @@
 out
-src/main/org/x96/sys/foundation/cs/lexer/visitor/entry/terminals/**/*.java
-src/test/org/x96/sys/foundation/cs/lexer/visitor/entry/terminals/**/*.java
 build
 build.xml
 lib
 manifest.mf
 nbproject
-src/main/org/x96/sys/foundation/BuildInfo.java
+src/main/org/x96/sys/lexer/tokenizer/BuildInfo.java
 tools
 *.jar
+.idea
+.zig-cache

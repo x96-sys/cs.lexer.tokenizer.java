@@ -1,14 +1,14 @@
-package org.x96.sys.foundation.cs.lexer.tokenizer;
+package org.x96.sys.lexer.tokenizer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.cs.lexer.token.Kind;
-import org.x96.sys.foundation.cs.lexer.token.Token;
-import org.x96.sys.foundation.cs.lexer.token.architecture.span.Position;
-import org.x96.sys.foundation.io.ByteStream;
+import org.x96.sys.io.ByteStream;
+import org.x96.sys.lexer.token.Kind;
+import org.x96.sys.lexer.token.Token;
+import org.x96.sys.lexer.token.architecture.span.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,8 @@ class TokenizerTest {
         assertEquals("a", tokenizer.getLineByNumber(1));
         assertEquals("", tokenizer.getLineByNumber(4));
 
-        input = """
+        input =
+                """
                 example of text
                 with multiples
                 lines\
@@ -45,7 +46,7 @@ class TokenizerTest {
 
     @Test
     void happyOverKind() {
-        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(new byte[] { 0x61 }));
+        Tokenizer tokenizer = new Tokenizer(ByteStream.raw(new byte[] {0x61}));
         assertEquals(1, tokenizer.length());
         assertTrue(tokenizer.ready());
         assertEquals(Kind.LATIN_SMALL_LETTER_A, tokenizer.kind());
